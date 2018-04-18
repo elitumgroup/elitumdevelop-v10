@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--
+            Creamos Categorías de Grupos (Roles). A esté le añadimos los grupos (Perfiles) principales
+            dentro del sistema según la empresa.
+        -->
+        <!--Padre-->
+        <record id="elitumgroup_category_roles" model="ir.module.category">
+            <field name="name">Roles</field>
+        </record>
+        <!--Hijos-->
+        <record id="elitumgroup_group_0" model="res.groups">
+            <field name="name">Administrador</field>
+            <field name="category_id" ref="elitumgroup_category_roles"/>
+        </record>
+        <record id="elitumgroup_group_1" model="res.groups">
+            <field name="name">Gerente General</field>
+            <field name="category_id" ref="elitumgroup_category_roles"/>
+        </record>
+        <record id="elitumgroup_group_2" model="res.groups">
+            <field name="name">Administrativo Comercial</field>
+            <field name="category_id" ref="elitumgroup_category_roles"/>
+        </record>
+        <record id="elitumgroup_group_3" model="res.groups">
+            <field name="name">Contable Senior</field>
+            <field name="category_id" ref="elitumgroup_category_roles"/>
+        </record>
+        <record id="elitumgroup_group_4" model="res.groups">
+            <field name="name">Tesorería Senior</field>
+            <field name="category_id" ref="elitumgroup_category_roles"/>
+        </record>
+        <record id="elitumgroup_group_5" model="res.groups">
+            <field name="name">Analista RRHH</field>
+            <field name="category_id" ref="elitumgroup_category_roles"/>
+        </record>
+    </data>
+</odoo>
+
+

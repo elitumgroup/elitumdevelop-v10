@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!--Grupo para mostrar/ocultar menú en vista principal-->
+        <record id="elitumgroup_group_finanzas" model="res.groups">
+            <field name="name">Módulo Tesorería</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <!--Aprobaciones-->
+        <record id="elitumgroup_group_approve_caja_chica" model="res.groups">
+            <field name="name">Aprobar Caja Chica</field>
+        </record>
+        <!--Otros Botones-->
+        <record id="elitumgroup_group_liquidate_caja_chica" model="res.groups">
+            <field name="name">Liquidar Caja Chica</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="eliterp_settlement_view_form_wizard" model="ir.ui.view">
+            <field name="name">eliterp.settlement.view.form.wizard</field>
+            <field name="model">eliterp.settlement.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Explique la Razón - Finiquito">
+                    <group col="4">
+                        <field name="employee" options="{'no_create':True, 'no_open': True}"/>
+                        <field name="reason_of_exit"/>
+                        <field name="date_of_admission"/>
+                        <field name="departure_date"/>
+                        <field name="last_salary"/>
+                        <field name="monthly_benefits"/>
+                        <field name="pending_holidays"/>
+                    </group>
+                    <footer>
+                        <button name="create_settlement"
+                                type="object"
+                                class="oe_highlight"
+                                string="Generar"/>
+                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="eliterp_settlement_view_form" model="ir.ui.view">
+            <field name="name">eliterp.settlement.view.form</field>
+            <field name="model">eliterp.settlement</field>
+            <field name="arch" type="xml">
+                <form string="Finiquito" create="false" edit="false">
+                    <header>
+                        <field name="state"
+                               widget="statusbar"
+                               modifiers="{'readonly': true}"/>
+                        <button name="confirm"
+                                type="object"
+                                class="oe_highlight"
+                                states="draft"
+                                help="Al confirmar coloca el estado del empleado en pasivo"
+                                string="Confirmar"/>
+                    </header>
+                    <sheet>
+                        <h1 class="mt0">
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <group string="Información" col="4">
+                            <field name="employee"/>
+                            <field name="reason_of_exit"/>
+                            <field name="date_of_admission"/>
+                            <field name="departure_date"/>
+                            <field name="last_salary"/>
+                            <field name="monthly_benefits"/>
+                            <field name="pending_holidays"/>
+                        </group>
+                        <group col="2">
+                            <group string="Resultado del Cálculo" col="2">
+                                <field name="total_thirteenth"/>
+                                <field name="total_fourteenth"/>
+                                <field name="total_vacation"/>
+                                <field name="approximate_settlement"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="eliterp_settlement_view_tree" model="ir.ui.view">
+            <field name="name">eliterp.settlement.view.tree</field>
+            <field name="model">eliterp.settlement</field>
+            <field name="arch" type="xml">
+                <tree create="false" edit="false"
+                      decoration-info="state == 'draft'"
+                      colors="blue:state == 'confirm'"
+                      default_order='create_date desc'>
+                    <field name="employee"/>
+                    <field name="reason_of_exit"/>
+                    <field name="departure_date"/>
+                    <field name="last_salary"/>
+                    <field name="approximate_settlement"/>
+                    <field name="state" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

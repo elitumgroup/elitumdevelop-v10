@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="elitumgroup.begin.dashboard" id="elitumgroup_dashboard_approve_data">
+            <field name="name">No. Aprobaciones Pendientes</field>
+            <field name="type">bar</field>
+            <field name="type_dashboard">tipo</field>
+        </record>
+    </data>
+</odoo>

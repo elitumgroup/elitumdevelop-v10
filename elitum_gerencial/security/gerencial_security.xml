@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="elitumgroup_group_gerencial" model="res.groups">
+            <field name="name">Módulo Gerencial</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <!--Grupos de Panel de Control-->
+        <record id="elitumgroup_group_line_panel_control_eliterp_user" model="res.groups">
+            <field name="name">Panel de Control (Usuario)</field>
+        </record>
+        <record id="elitumgroup_group_line_panel_control_eliterp_junior" model="res.groups">
+            <field name="name">Panel de Control (Junior)</field>
+        </record>
+        <record id="elitumgroup_group_line_panel_control_eliterp_senior" model="res.groups">
+            <field name="name">Panel de Control (Senior)</field>
+        </record>
+        <record id="elitumgroup_group_line_panel_control_eliterp_manager" model="res.groups">
+            <field name="name">Panel de Control (Administrador)</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+    </data>
+</odoo>

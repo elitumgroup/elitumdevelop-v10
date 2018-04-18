@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="elitumgroup_group_contabilidad" model="res.groups">
+            <field name="name">Módulo Contabilidad</field>
+            <field name="users" eval="[(4, ref('base.user_root'))]"/>
+        </record>
+        <!--Aprobaciones-->
+        <record id="elitumgroup_group_approve_payment_document" model="res.groups">
+            <field name="name">Aprobar Pago de Documentos</field>
+        </record>
+    </data>
+</odoo>

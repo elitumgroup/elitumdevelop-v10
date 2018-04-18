@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!--Gráfica-->
+        <record id="elitumgroup_dashboard_begin" model="ir.ui.view">
+            <field name="name">elitumgroup.dashboard.begin</field>
+            <field name="model">elitumgroup.begin.dashboard</field>
+            <field name="arch" type="xml">
+                <kanban create="false" class="oe_background_grey o_kanban_dashboard o_account_kanban">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="type"/>
+                    <field name="type_dashboard"/>
+                    <field name="kanban_dashboard"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="#{kanban_color(0)}">
+                                <t t-value="JSON.parse(record.kanban_dashboard.raw_value)" t-set="dashboard"/>
+                                <t t-value="record.type.raw_value" t-set="dashboard_type"/>
+                                <t t-value="record.type_dashboard.raw_value" t-set="type"/>
+                                <t t-call="TableroTop"/>
+                                <div class="container o_kanban_card_manage_pane o_invisible">
+                                    <t t-call="JournalManage"/>
+                                </div>
+                                <div class="container o_kanban_card_content o_visible">
+                                    <t t-call="BodyGraph"/>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-name="TableroTop">
+                            <div class="o_kanban_card_header">
+                                <div class="o_kanban_card_header_title">
+                                    <div class="o_primary">
+                                        <field name="name"/>
+                                    </div>
+                                    <div class="o_secondary" t-att-title="dashboard.title">
+                                        <!--MARZ-->
+                                    </div>
+                                </div>
+                                <div class="o_kanban_manage_button_section">
+                                    <a class="o_kanban_manage_toggle_button" href="#">Más
+                                        <i class="fa fa-caret-down"/>
+                                    </a>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-name="BodyGraph">
+                            <div class="o_kanban_graph_section">
+                                <field name="kanban_dashboard_graph"
+                                       t-if="dashboard_type == 'bar'"
+                                       t-att-graph_type="'bar'"
+                                       widget="dashboard_graph_begin"/>
+                            </div>
+                        </t>
+                        <t t-name="JournalManage">
+                            <t t-if="dashboard_type == 'bar' and type == 'tipo'">
+                                <div class="row">
+                                    <div class="col-xs-7 o_kanban_card_manage_section o_kanban_manage_view">
+                                        <div class="o_kanban_card_manage_title">
+                                            <strong>
+                                                <span>Aprobación de</span>
+                                            </strong>
+                                        </div>
+                                        <t t-foreach="dashboard.dashboard_1" t-as="data">
+                                            <div>
+                                                <span>
+                                                    <t t-esc="data['label']"/>
+                                                </span>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <div class="col-xs- o_kanban_card_manage_section o_kanban_manage_view">
+                                        <div class="o_kanban_card_manage_title text-center">
+                                            <span>Cantidad</span>
+                                        </div>
+                                        <t t-value="dashboard.dashboard_1" t-set="data"/>
+                                        <!--Ausencias-->
+                                        <div>
+                                            <a type="object"
+                                               name="open_action"
+                                               context="{'action_name': 'elitum_gerencial.gerencial_action_ausencias'}">
+                                                <span>
+                                                    <t t-esc="data[0]['value']"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <!--Caja Chica-->
+                                        <div>
+                                            <a type="object"
+                                               name="open_action"
+                                               context="{'action_name': 'elitum_gerencial.gerencial_action_caja_chica_reposicion'}">
+                                                <span>
+                                                    <t t-esc="data[1]['value']"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <!--Compras - Facturas-->
+                                        <div>
+                                            <a type="object"
+                                               name="open_action"
+                                               context="{'action_name': 'elitum_gerencial.gerencial_factura_proveedor_action'}">
+                                                <span>
+                                                    <t t-esc="data[2]['value']"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <!--Anticipos de Quincena-->
+                                        <div>
+                                            <a type="object"
+                                               name="open_action"
+                                               context="{'action_name': 'elitum_gerencial.elitumgroup_gerencial_open_action_anticipo'}">
+                                                <span>
+                                                    <t t-esc="data[3]['value']"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <!--Roles de Empleado-->
+                                        <div>
+                                            <a type="object"
+                                               name="open_action"
+                                               context="{'action_name': 'elitum_gerencial.gerencial_open_action_nomina'}">
+                                                <span>
+                                                    <t t-esc="data[4]['value']"/>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <!--Solicitudes de Viáticos-->
+                                        <div>
+                                            <a type="object"
+                                               name="open_action"
+                                               context="{'action_name': 'elitum_gerencial.eliterp_open_solicitud_provision_tree_gerencial'}">
+                                                <span>
+                                                    <t t-esc="data[5]['value']"/>
+                                                </span>
+                                            </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+        <record id="elitumgroup_open_dashboard_begin" model="ir.actions.act_window">
+            <field name="name">Resumen Gerencial</field>
+            <field name="res_model">elitumgroup.begin.dashboard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,form</field>
+            <field name="usage">menu</field>
+        </record>
+        <menuitem name="Inicio"
+                  id="eliterp_menu_root_inicio"
+                  web_icon="elitum_inicio,static/description/icon.png"
+                  groups="elitum_inicio.elitumgroup_group_begin"
+                  sequence="1"/>
+        <menuitem id="menu_inicio_tablero"
+                  name="Inicio"
+                  action="elitumgroup_open_dashboard_begin"
+                  parent="elitum_inicio.eliterp_menu_root_inicio"
+                  sequence="-1"/>
+        <menuitem id="menu_inicio_calendario"
+                  name="Calendario"
+                  action="calendar.action_calendar_event"
+                  parent="elitum_inicio.eliterp_menu_root_inicio"
+                  sequence="1"/>
+        <menuitem id="menu_inicio_mensajeria"
+                  name="Mensajería"
+                  action="mail.mail_channel_action_client_chat"
+                  parent="elitum_inicio.eliterp_menu_root_inicio"
+                  sequence="2"/>
+    </data>
+</openerp>
+
+
+
