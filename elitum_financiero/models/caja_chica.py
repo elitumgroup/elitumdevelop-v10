@@ -62,11 +62,16 @@ class PettyCashVoucher(models.Model):
                 raise ValidationError(_("Debe validar la Factura"))
         else:
             # MARZ
+            count = 1
             if len(self.line_petty_cash_voucher) == 0:
                 raise ValidationError(_("Debe ingresar las Líneas de Cuentas"))
             for line in self.line_petty_cash_voucher:
+                if not line.account_id:
+                    raise ValidationError(_("Debe asociar una cuenta en la línea %d") % (count))
                 if line.amount == 0.00:
                     raise ValidationError(_("Debe eliminar las Líneas de Cuentas con Monto igual a 0"))
+                count += 1
+
         return self.write({'state': 'open',
                            'name': self.journal_id.sequence_id.next_by_id(),
                            'petty_cash_replacement_id': self.custodian_id.petty_cash_id.id})
