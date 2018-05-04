@@ -394,7 +394,7 @@ class AccountInvoice(models.Model):
             notas_credito = self.env['account.invoice'].search(
                 [('invoice_id_ref', '=', self.invoice_id_ref.id), ('state', '=', 'open')])
             valor_para_nota = self.invoice_id_ref.amount_untaxed - sum(nota.amount_total for nota in notas_credito)
-            if self.amount_total > valor_para_nota:
+            if self.amount_untaxed > valor_para_nota:
                 raise except_orm("Error",
                                  "Excede de la Base Imponible de la Factura No. %s" % self.invoice_id_ref.numero_factura)
             res = super(AccountInvoice, self).action_invoice_open()
