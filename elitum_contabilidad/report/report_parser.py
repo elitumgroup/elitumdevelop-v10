@@ -157,8 +157,8 @@ class ReporteLibroMayor(models.AbstractModel):
             haber_total = 0.00
             data_line = []
             for line in lines:
-                debe_total = debe_total + line.debit
-                haber_total = haber_total + line.credit
+                debe_total = debe_total + round(line.debit, 2)
+                haber_total = haber_total + round(line.credit, 2)
                 tipo = (cuenta.code.split("."))[0]
                 monto = line.debit - line.credit
                 if tipo in ['1', '5']:
@@ -176,9 +176,9 @@ class ReporteLibroMayor(models.AbstractModel):
                 data_line.append({'name': line.move_id.name,
                                   'fecha': line.date,
                                   'detalle': line.name,
-                                  'debe': line.debit,
-                                  'haber': line.credit,
-                                  'saldo': saldo})
+                                  'debe': round(line.debit, 2),
+                                  'haber': round(line.credit, 2),
+                                  'saldo': round(saldo, 2)})
 
             saldo_total = debe_total - haber_total
             if len(lines) != 0:
@@ -411,8 +411,8 @@ class ReporteEstadoFinanciero(models.AbstractModel):
                                                                ('date', '=', str(final))])
             movimientos = movimientos | movimiento
         for line in movimientos:
-            credit += line.credit
-            debit += line.debit
+            credit += round(line.credit, 2)
+            debit += round(line.debit, 2)
         monto = round(debit - credit, 2)
         if tipo == '1':
             if debit < credit:
