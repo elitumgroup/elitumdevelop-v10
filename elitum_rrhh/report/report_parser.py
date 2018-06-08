@@ -19,6 +19,7 @@
 from odoo import api, fields, models, _
 import datetime
 
+
 class ReporteRolPago(models.AbstractModel):
     _name = 'report.elitum_rrhh.reporte_rol_pago'
 
@@ -174,20 +175,31 @@ class ReporteSolicitudVacaciones(models.AbstractModel):
 
     def get_period_vacaciones(self, doc):
         data = []
+        day = int(self.number_of_days_temp)
         for line in doc.linea_vacaciones:
-            if line.vacaciones_disponibles != 0:
+            if line.vacaciones_disponibles <= day:
+                if line.vacaciones_disponibles != 0:
+                    data.append({
+                        'period': line.periodo,
+                        'disponibles': int(line.vacaciones_disponibles),
+                        'solicitados': int(line.vacaciones_disponibles),
+                        'saldo': 0
+                    })
+                day = day - line.vacaciones_disponibles
+            else:
                 data.append({
                     'period': line.periodo,
                     'disponibles': int(line.vacaciones_disponibles),
-                    'solicitados': int(doc.number_of_days_temp),
-                    'saldo': int(line.vacaciones_disponibles - doc.number_of_days_temp)
+                    'solicitados': day,
+                    'saldo': int(line.vacaciones_disponibles - day)
                 })
+                day = 0
         return data
 
     def get_format_date(self, fecha):
         '''Convierte String a Fecha'''
         object_datetime = datetime.datetime.strptime(fecha, "%Y-%m-%d %H:%M:%S")
-        object_datetime = object_datetime-datetime.timedelta(hours=5)
+        object_datetime = object_datetime - datetime.timedelta(hours=5)
         return object_datetime.date().strftime("%d/%m/%Y")
 
     @api.model
