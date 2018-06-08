@@ -435,7 +435,7 @@ class ReporteVacacionesPersonal(models.TransientModel):
                 24))
             data.append({
                 'periodo': str(fecha_ingreso.year) + "-" + str(fecha_actual.year),
-                'dias_vacaciones': dias,
+                'dias_vacaciones': int(dias),
                 'vacaciones_tomadas': 0,
                 'vacaciones_disponibles': 0,
             })
@@ -446,7 +446,7 @@ class ReporteVacacionesPersonal(models.TransientModel):
                         fecha_ingreso, datetime.min.time())).days) / float(24))
                     data.append({
                         'periodo': str(fecha_ingreso.year) + "-" + str(fecha_actual.year),
-                        'dias_vacaciones': dias,
+                        'dias_vacaciones': int(dias),
                         'vacaciones_tomadas': 0,
                         'vacaciones_disponibles': 0,
                     })
@@ -454,7 +454,7 @@ class ReporteVacacionesPersonal(models.TransientModel):
                     dias = 15
                     data.append({
                         'periodo': str(fecha_ingreso.year) + "-" + str(fecha_actual.year),
-                        'dias_vacaciones': dias,
+                        'dias_vacaciones': int(dias),
                         'vacaciones_tomadas': 0,
                         'vacaciones_disponibles': 0,
                     })
@@ -462,7 +462,7 @@ class ReporteVacacionesPersonal(models.TransientModel):
                         fecha_ingreso.replace(year=fecha_actual.year), datetime.min.time())).days) / float(24))
                     data.append({
                         'periodo': str(fecha_actual.year) + "-" + str(fecha_actual.year + 1),
-                        'dias_vacaciones': dias,
+                        'dias_vacaciones': int(dias),
                         'vacaciones_tomadas': 0,
                         'vacaciones_disponibles': 0,
                     })
@@ -471,7 +471,7 @@ class ReporteVacacionesPersonal(models.TransientModel):
                     dias = 15
                     data.append({
                         'periodo': str(fecha_ingreso.year) + "-" + str(fecha_ingreso.year + x),
-                        'dias_vacaciones': dias,
+                        'dias_vacaciones': int(dias),
                         'vacaciones_tomadas': 0,
                         'vacaciones_disponibles': 0,
                     })
@@ -479,15 +479,15 @@ class ReporteVacacionesPersonal(models.TransientModel):
                     dias = int(float((datetime.combine(fecha_actual, datetime.min.time()) - datetime.combine(
                         fecha_ingreso.replace(year=fecha_actual.year - 1), datetime.min.time())).days) / float(24))
                     data.append({'empleado': empleado.id,
-                                 'periodo': str(fecha_ingreso.year + 1) + "-" + str(fecha_actual.year),
-                                 'dias_vacaciones': dias,
+                                 'periodo': str(fecha_ingreso.year) + "-" + str(fecha_actual.year),
+                                 'dias_vacaciones': int(dias),
                                  'vacaciones_tomadas': 0,
                                  'vacaciones_disponibles': 0, })
                 else:
                     dias = 15
                     data.append({
-                        'periodo': str(fecha_ingreso.year) + "-" + str(fecha_actual.year),
-                        'dias_vacaciones': dias,
+                        'periodo': str(fecha_ingreso.year + 1) + "-" + str(fecha_actual.year),
+                        'dias_vacaciones': int(dias),
                         'vacaciones_tomadas': 0,
                         'vacaciones_disponibles': 0,
                     })
@@ -495,11 +495,11 @@ class ReporteVacacionesPersonal(models.TransientModel):
                         fecha_ingreso.replace(year=fecha_actual.year), datetime.min.time())).days) / float(24))
                     data.append({
                         'periodo': str(fecha_actual.year) + "-" + str(fecha_actual.year + 1),
-                        'dias_vacaciones': dias,
+                        'dias_vacaciones': int(dias),
                         'vacaciones_tomadas': 0,
                         'vacaciones_disponibles': 0,
                     })
-        vacaciones_tomadas = self.env['hr.holidays'].get_vacaciones_tomadas(empleado)
+        vacaciones_tomadas = int(self.env['hr.holidays'].get_vacaciones_tomadas(empleado))
         for line in data:
             if vacaciones_tomadas != 0:
                 if vacaciones_tomadas == line['dias_vacaciones']:
@@ -509,26 +509,26 @@ class ReporteVacacionesPersonal(models.TransientModel):
                     continue
                 if vacaciones_tomadas - line['dias_vacaciones'] > 0:
                     line.update({
-                        'vacaciones_tomadas': line['dias_vacaciones'],
+                        'vacaciones_tomadas': int(line['dias_vacaciones']),
                         'vacaciones_disponibles': 0
                     })
-                    vacaciones_tomadas = vacaciones_tomadas - line['dias_vacaciones']
+                    vacaciones_tomadas = vacaciones_tomadas - int(line['dias_vacaciones'])
                     continue
                 if vacaciones_tomadas - line['dias_vacaciones'] < 0:
                     line.update({
                         'vacaciones_tomadas': vacaciones_tomadas,
-                        'vacaciones_disponibles': abs(vacaciones_tomadas - line['dias_vacaciones'])
+                        'vacaciones_disponibles': abs(vacaciones_tomadas - int(line['dias_vacaciones']))
                     })
                     vacaciones_tomadas = 0
                     continue
             if vacaciones_tomadas == 0:
                 line.update({
                     'vacaciones_tomadas': 0,
-                    'vacaciones_disponibles': line['dias_vacaciones']
+                    'vacaciones_disponibles': int(line['dias_vacaciones'])
                 })
         if vacaciones_tomadas != 0:
             data[-1].update(
-                {'vacaciones_disponibles': data[-1].vacaciones_disponibles - vacaciones_tomadas})
+                {'vacaciones_disponibles': int(data[-1].vacaciones_disponibles - vacaciones_tomadas)})
         return data
 
     def get_lines(self, context):
