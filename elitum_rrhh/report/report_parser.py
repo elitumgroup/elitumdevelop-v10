@@ -175,7 +175,7 @@ class ReporteSolicitudVacaciones(models.AbstractModel):
 
     def get_period_vacaciones(self, doc):
         data = []
-        day = int(self.number_of_days_temp)
+        day = int(doc.number_of_days_temp)
         for line in doc.linea_vacaciones:
             if line.vacaciones_disponibles <= day:
                 if line.vacaciones_disponibles != 0:
