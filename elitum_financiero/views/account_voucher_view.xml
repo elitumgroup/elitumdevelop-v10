@@ -208,6 +208,10 @@
                                 type="object"
                                 class="oe_highlight"
                                 string="Imprimir"/>
+                        <button name="imprimir_cheque_matricial"
+                                type="object"
+                                class="oe_highlight"
+                                string="Imprimir Cheque"/>
                         <button name="action_vocher_cancel_reason" string="Anular" states="posted"
                                 type="object"/>
                         <button name="validar_voucher_eliterp" string="Contabilizar" states="draft" class="oe_highlight"

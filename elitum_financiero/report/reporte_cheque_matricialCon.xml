@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <data>
-        <report id="cheque_matricial"
-                model="cheques.eliterp"
-                string="Cheque Emitido"
+        <report id="cheque_matricial_financiero"
+                model="account.voucher"
+                string="Cheque Emitido Cheque"
                 report_type="qweb-pdf"
-                name="elitum_contabilidad.reporte_cheque_matricial"
-                file="elitum_contabilidad.reporte_cheque_matricial"/>
+                name="elitum_financiero.reporte_cheque_matricial_financiero"
+                file="elitum_financiero.reporte_cheque_matricial_financiero"/>
 
-        <record id="paperformat_reporte_cheque_matricial" model="report.paperformat">
+        <record id="paperformat_reporte_cheque_matricial_financiero" model="report.paperformat">
             <field name="name">Cheque Emitido</field>
             <field name="default" eval="True"/>
             <field name="format">A4</field>
@@ -24,11 +24,11 @@
             <field name="dpi">90</field>
         </record>
 
-        <record id="elitum_contabilidad.cheque_matricial" model="ir.actions.report.xml">
-            <field name="paperformat_id" ref="elitum_contabilidad.paperformat_reporte_cheque_matricial"/>
+        <record id="elitum_financiero.cheque_matricial_financiero" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="elitum_financiero.paperformat_reporte_cheque_matricial_financiero"/>
         </record>
 
-        <template id="reporte_cheque_matricial">
+        <template id="reporte_cheque_matricial_financiero">
             <t t-call="report.html_container">
                 <t t-foreach="docs" t-as="doc">
                      <div class="page">
@@ -47,10 +47,10 @@
                                     <td width="1%">
                                     </td>
                                     <td width="72%">
-                                       <span t-esc="doc.nombre"/>
+                                       <span t-esc="doc.beneficiario"/>
                                     </td>
                                     <td width="6%">
-                                        <p><span t-esc='"%.2f" %doc.monto'/></p>
+                                        <p><span t-esc='"%.2f" %doc.cantidad'/></p>
                                     </td>
                                     <td width="10%">
 
@@ -59,7 +59,7 @@
                                 <tr>
                                     <td>&amp;nbsp;</td>
                                     <td colspan="2">
-                                        <span t-esc="get_amount_to_word(doc.monto)"/>
+                                        <span t-esc="get_amount_to_word(doc.cantidad)"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -68,7 +68,7 @@
                                 <tr>
                                     <td colspan="3">
                                         <br/>
-                                        <span t-esc="get_lugar_fecha(doc.fecha_del_cheque)"/>
+                                        <span t-esc="get_lugar_fecha(doc.date)"/>
                                     </td>
                                 </tr>
                             </tbody>

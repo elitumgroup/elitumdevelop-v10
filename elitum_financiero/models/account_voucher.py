@@ -203,6 +203,9 @@ class AccountVoucher(models.Model):
     def imprimir_comprobante_egreso(self):
         return self.env['report'].get_action(self, 'elitum_financiero.reporte_comprobante_egreso')
 
+    def imprimir_cheque_matricial(self):
+        return self.env['report'].get_action(self, 'elitum_financiero.reporte_cheque_matricial_financiero')
+
     @api.multi
     def _get_total(self):
         for voucher in self:

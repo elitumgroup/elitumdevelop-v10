@@ -41,6 +41,7 @@
         'report/comprobante_egreso.xml',
         'report/reporte_vale_caja_chica.xml',
         'report/reporte_reposicion_caja_chica.xml',
+        'report/reporte_cheque_matricialCon.xml',
         'report/reporte_pago_programado.xml',
         'report/reporte_cuentas_cobrar_completo.xml',
         'report/reporte_cuentas_pagar_completo.xml',
