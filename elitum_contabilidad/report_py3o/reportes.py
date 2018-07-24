@@ -165,7 +165,7 @@ class Reporte103104(models.TransientModel):
         arg.append(('date_invoice', '>=', context['fecha_inicio']))
         arg.append(('date_invoice', '<=', context['fecha_fin']))
         arg.append(('state', 'not in', ('draft', 'cancel')))
-        arg.append(('type', 'in', ('in_invoice', 'in_sale_note')))
+        arg.append(('type', 'in', ('in_invoice', 'in_sale_note', 'in_refund')))
         facturas = self.env['account.invoice'].search(arg)
         count = 0
         for factura in facturas:
