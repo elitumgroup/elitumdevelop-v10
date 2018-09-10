@@ -84,7 +84,7 @@
                                    class="table table-condensed col-xs-12">
                                 <thead>
                                     <tr style="background-color:#D3D3D3;">
-                                        <th class="text-center col-xs-4">
+                                        <th class="text-center col-xs-2">
                                             <b>EMPLEADO</b>
                                         </th>
                                         <th class="text-center col-xs-1">
@@ -108,7 +108,7 @@
                                         <th class="text-center col-xs-1">
                                             <b>TIEMPO</b>
                                         </th>
-                                        <th class="text-center col-xs-1">
+                                        <th class="text-center col-xs-3">
                                             <b>COMENTARIO</b>
                                         </th>
                                     </tr>
