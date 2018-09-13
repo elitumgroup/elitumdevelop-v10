@@ -211,11 +211,13 @@
                         <button name="imprimir_cheque_matricial"
                                 type="object"
                                 class="oe_highlight"
-                                string="Imprimir Cheque"/>
+                                string="Imprimir Cheque V"/>
                         <button name="action_vocher_cancel_reason" string="Anular" states="posted"
                                 type="object"/>
                         <button name="validar_voucher_eliterp" string="Contabilizar" states="draft" class="oe_highlight"
                                 type="object" modifiers="{'invisible': [['state', 'not in', ['draft']]]}"/>
+                        <button name="imprimir_cheque" string="Imprimir cheque N" attrs="{'invisible':[('forma_de_pago', '!=', 'bank')]}"
+                                type="object"/>
                     </header>
                     <sheet>
                         <div class="oe_title">

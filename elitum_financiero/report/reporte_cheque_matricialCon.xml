@@ -46,11 +46,11 @@
                                     <td width="60px">&amp;nbsp;</td>
                                     <td width="1%">
                                     </td>
-                                    <td width="72%">
+                                    <td width="75%">
                                        <span t-esc="doc.beneficiario"/>
                                     </td>
                                     <td width="6%">
-                                        <p><span t-esc='"%.2f" %doc.cantidad'/></p>
+                                        <p><span t-esc="&quot;%.2f&quot; %doc.cantidad"/></p>
                                     </td>
                                     <td width="10%">
 

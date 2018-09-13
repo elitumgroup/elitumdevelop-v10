@@ -805,6 +805,28 @@ class AccountVoucher(models.Model):
             else:
                 return True
 
+    def imprimir_cheque(self):
+        reporte = []
+        reporte.append(self.id)
+        amount = self.env['report.elitum_contabilidad.reporte_factura_cliente'].get_amount_to_word(
+            self.cantidad).upper()
+        if self.banco.display_name == 'BANCO BOLIVARIANO (CTA. CTE. # 000-53XXXX-8)':
+            result = {
+                'type': 'ir.actions.report.xml',
+                'report_name': 'elitum_financiero.reporte_cheque_bo',
+                'datas': {'ids': reporte},
+                'context': {
+                    'reporte_cheque_i': True,
+                    'fecha': 'GUAYAQUIL, ' + self.date,
+                    'nombre': self.beneficiario,
+                    'monto': self.cantidad,
+                    'monto_letras': amount
+                }
+            }
+        else:
+            return
+        return result
+
     lineas_tipos_pagos = fields.One2many('payment.type.lines', 'voucher_id', string=u'Detalle de Cobros')
     lineas_cobros_facturas = fields.One2many('lines.invoice.charges', 'voucher_id', string=u'Detalle de Cobros')
     lineas_pagos_facturas = fields.One2many('lines.invoice.charges', 'voucher_id', string=u'Detalle de Pagos')
