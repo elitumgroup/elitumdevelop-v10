@@ -28,6 +28,11 @@ class ChequesEliterp(models.Model):
     _description = 'Cheques'
 
     # MARZ
+    class Voucher(models.Model):
+        _inherit = 'account.voucher'
+        reconcile = fields.Boolean('Conciliado?', default=False)
+
+
     def imprimir_reporte_cheque(self):
         return self.env['report'].get_action(self, 'elitum_contabilidad.reporte_cheque_matricial')
 
@@ -61,3 +66,5 @@ class ChequesEliterp(models.Model):
                              string=u'Estado')
 
     asiento_contable = fields.Many2one('account.move')
+    voucher_id = fields.Many2one('account.voucher', string='Pago/Cobro')
+    reconcile = fields.Boolean(related='voucher_id.reconcile', string='Conciliado?')

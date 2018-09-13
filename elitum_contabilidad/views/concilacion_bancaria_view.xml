@@ -85,11 +85,11 @@
                                    nolabel="1" attrs="{'readonly':[('state','=', 'confirmado')]}">
                                 <tree editable="bottom" create="false">
                                     <field name="check"/>
-                                    <field name="fecha"/>
-                                    <field name="tipo"/>
-                                    <field name="concepto"/>
-                                    <field name="referencia"/>
-                                    <field name="valor" />
+                                    <field name="fecha" readonly="1"/>
+                                    <field name="tipo" readonly="1"/>
+                                    <field name="concepto" readonly="1"/>
+                                    <field name="referencia" readonly="1"/>
+                                    <field name="valor" readonly="1"/>
                                     <field name="move_line_id" invisible="1"/>
                                 </tree>
                             </field>
