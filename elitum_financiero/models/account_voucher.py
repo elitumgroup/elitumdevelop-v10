@@ -42,7 +42,7 @@ class AccountVoucherSaldoELiterp(models.Model):
         return True
 
     saldo = fields.Float('Saldo')
-    account_saldo = fields.Many2one('account.account', domain=[('tipo_contable', '=', 'movimiento')])
+    account_saldo = fields.Many2one('account.account', domain=[('tipo_contable', '=', 'movimiento')], required=True)
 
 
 class AccountPayment(models.Model):
@@ -363,22 +363,23 @@ class AccountVoucher(models.Model):
                 {'name': name,
                  'journal_id': comprobante.journal_id.id,
                  'partner_id': comprobante.partner_id.id,
-                 'account_id': account_debit,
+                 'account_id': self.account_saldo.id,
                  'move_id': move_id.id,
                  'credit': saldo,
                  'debit': 0.0,
                  'date': comprobante.date
                  })
-        self.env['account.move.line'].with_context(check_move_validity=False).create(
-            {'name': comprobante.partner_id.name,
-             'journal_id': comprobante.journal_id.id,
-             'partner_id': comprobante.partner_id.id,
-             'account_id': account_credit,
-             'move_id': move_id.id,
-             'credit': (credit - saldo) if saldo > 0 else credit,
-             'debit': 0.0,
-             'date': comprobante.date
-             })
+        if self.lineas_cobros_facturas:
+            self.env['account.move.line'].with_context(check_move_validity=False).create(
+                {'name': comprobante.partner_id.name,
+                 'journal_id': comprobante.journal_id.id,
+                 'partner_id': comprobante.partner_id.id,
+                 'account_id': account_credit,
+                 'move_id': move_id.id,
+                 'credit': (credit - saldo) if saldo > 0 else credit,
+                 'debit': 0.0,
+                 'date': comprobante.date
+                 })
         self.env['account.move.line'].with_context(check_move_validity=True).create(
             {'name': comprobante.partner_id.name,
              'journal_id': comprobante.journal_id.id,
@@ -859,10 +860,10 @@ class AccountVoucher(models.Model):
     total_factura = fields.Monetary('Total Factura', compute='_get_total_factura')
     account_id = fields.Many2one('account.account', string='Cuenta',
                                  domain=[('deprecated', '=', False), ('tipo_contable', '=', 'movimiento')])
-    concepto_pago = fields.Char('Concepto', required=True)
+    concepto_pago = fields.Char('Concepto', required=True, readonly=True, states={'draft': [('readonly', False)]})
     flag_saldo = fields.Boolean('Ya no hay saldo', default=False)
     mostrar_cuenta = fields.Boolean('Se muestra la Cuenta?', default=False)
-    account_saldo = fields.Many2one('account.account', domain=[('tipo_contable', '=', 'movimiento')])
+    account_saldo = fields.Many2one('account.account', domain=[('tipo_contable', '=', 'movimiento')], readonly=True, states={'draft': [('readonly', False)]})
     valor_saldo = fields.Float('saldo')
     state = fields.Selection([
         ('draft', 'Borrador'),
