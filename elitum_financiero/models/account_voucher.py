@@ -812,11 +812,6 @@ class AccountVoucher(models.Model):
         reporte.append(self.id)
         amount = self.env['report.elitum_contabilidad.reporte_factura_cliente'].get_amount_to_word(
             self.cantidad).upper()
-        monto1 = int(self.cantidad)
-        if self.cantidad - monto1 == 0:
-            monto = '{:,}'.format(self.cantidad) + "0"
-        else:
-            monto = '{:,}'.format(self.cantidad)
         if self.banco.display_name == 'BANCO BOLIVARIANO (CTA. CTE. # 000-53XXXX-8)':
             result = {
                 'type': 'ir.actions.report.xml',
@@ -826,7 +821,7 @@ class AccountVoucher(models.Model):
                     'reporte_cheque_i': True,
                     'fecha': 'GUAYAQUIL, ' + self.date,
                     'nombre': self.beneficiario,
-                    'monto': monto,
+                    'monto': '{:,.2f}'.format(self.cantidad),
                     'monto_letras': amount
                 }
             }
