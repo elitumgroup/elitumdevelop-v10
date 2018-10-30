@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <report id="certificate_inactive"
+                model="hr.contract"
+                string="Certificado Inactivo"
+                report_type="qweb-pdf"
+                name="elitum_rrhh.report_certificate_inactive"
+                file="elitum_rrhh.report_certificate_inactive"/>
+        <record id="paperformat_certificate_inactive" model="report.paperformat">
+            <field name="name">Certificado</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">25</field>
+            <field name="margin_right">25</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+        <record id="elitum_rrhh.certificate_inactive" model="ir.actions.report.xml">
+            <field name="paperformat_id" ref="elitum_rrhh.paperformat_certificate_inactive"/>
+        </record>
+        <template id="report_certificate_inactive">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                        <div class="clearfix text-center">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <h1>CERTIFICADO</h1>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                        <div class="clearfix text-justify">
+                            <p>
+                                <h4>
+                                    Por este medio certifico que el Sr (a).
+                                    <strong>
+                                        <span t-field="doc.employee_id"/>,
+                                    </strong>
+                                    con documento de identidad No.
+                                    <strong>
+                                        <span t-field="doc.employee_id.identification_id"/>;
+                                    </strong>
+                                    laboró en la empresa como
+                                    <font style="text-transform: uppercase;">
+                                        <strong>
+                                            <span t-field="doc.job_id"/>
+                                        </strong>
+                                    </font>
+                                    desde el
+                                    <strong>
+                                        <span t-esc='doc.get_lugar_fecha(doc.date_start)'/>
+                                    </strong>
+                                    hasta
+                                    <strong>
+                                        <span t-esc='doc.get_lugar_fecha(doc.fecha_salida)'/>
+                                    </strong>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    Guayaquil,
+                                    <span t-esc='doc.get_lugar_fecha()'/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </h4>
+                            </p>
+                        </div>
+                        <div class="clearfix">
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <p>______________________</p>
+                                    <p>
+                                        <strong>Gerente General</strong>
+                                    </p>
+                                    <p>
+                                        <strong>RUC 0992898542001</strong>
+                                    </p>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -54,6 +54,8 @@
         'report/reporte_anticipo_quincena.xml',
         'report/reporte_rol_consolidado.xml',
         'report/reporte_rol_pago.xml',
+        'report/report_certificate_active.xml',
+        'report/report_certificate_inactive.xml',
         'report/reporte_empleados.xml',
         'report/reporte_ausencias.xml',
         'report/reporte_vacaciones_personal.xml',

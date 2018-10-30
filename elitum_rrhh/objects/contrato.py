@@ -18,7 +18,7 @@
 
 from odoo import api, fields, models, _
 from dateutil.relativedelta import relativedelta
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 
 class hr_contract_funciones_lines(models.Model):
@@ -58,6 +58,14 @@ class Job(models.Model):
 
 class Contract(models.Model):
     _inherit = 'hr.contract'
+
+    def get_lugar_fecha(self, date_start=False):
+        if not date_start:
+            date_start = datetime.strftime(date.today(), "%Y-%m-%d")
+        ano = datetime.strptime(date_start, "%Y-%m-%d").year
+        mes = self.env['hr.payslip'].get_mes(datetime.strptime(date_start, "%Y-%m-%d").month)
+        dia = datetime.strptime(date_start, "%Y-%m-%d").day
+        return "" + str(dia) + " de " + mes + " del " + str(ano)
 
     @api.one
     def _get_antiguedad(self):
@@ -156,6 +164,19 @@ class Contract(models.Model):
             'name': name,
             'state_eliterp': 'activo'
         })
+
+    # Imprimir certificado
+    @api.multi
+    def imprimir_certificate(self):
+        """
+        Imprimimo certificado
+        """
+        self.ensure_one()
+        contract = self.state_eliterp
+        if contract == 'activo':
+            return self.env['report'].get_action(self, 'elitum_rrhh.report_certificate_active')
+        else:
+            return self.env['report'].get_action(self, 'elitum_rrhh.report_certificate_inactive')
 
     name = fields.Char('No. Contrato', required=False)
     if_trial = fields.Boolean('Período de Prueba?')
