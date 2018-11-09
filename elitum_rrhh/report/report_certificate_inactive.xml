@@ -46,50 +46,45 @@
                             <br/>
                             <br/>
                         </div>
-                        <div class="clearfix text-justify">
-                            <h4>
-                                <p>
-                                    <td style="line-height: 2">
-
-                                        Por este medio certifico que el Sr (a).
-                                        <strong>
-                                            <span t-field="doc.employee_id"/>,
-                                        </strong>
-                                        con documento de identidad No.
-                                        <strong>
-                                            <span t-field="doc.employee_id.identification_id"/>;
-                                        </strong>
-                                        laboró en la empresa como
-                                        <font style="text-transform: uppercase;">
-                                            <strong>
-                                                <span t-field="doc.job_id"/>
-                                            </strong>
-                                        </font>
-                                        desde el
-                                        <strong>
-                                            <span t-esc='doc.get_lugar_fecha(doc.date_start)'/>
-                                        </strong>
-                                        hasta el
-                                        <strong>
-                                            <span t-esc='doc.get_lugar_fecha(doc.fecha_salida)'/>
-                                        </strong>
-                                    </td>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    Guayaquil,
-                                    <span t-esc='doc.get_lugar_fecha()'/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                </p>
-                            </h4>
+                        <div class="clearfix text-justify" style="line-height: 2; font-size: 20px">
+                            <p>
+                                Por este medio certifico que el Sr (a).
+                                <strong>
+                                    <span t-field="doc.employee_id"/>,
+                                </strong>
+                                con documento de identidad No.
+                                <strong>
+                                    <span t-field="doc.employee_id.identification_id"/>;
+                                </strong>
+                                laboró en la empresa como
+                                <font style="text-transform: uppercase;">
+                                    <strong>
+                                        <span t-field="doc.job_id"/>
+                                    </strong>
+                                </font>
+                                desde el
+                                <strong>
+                                    <span t-esc='doc.get_lugar_fecha(doc.date_start)'/>
+                                </strong>
+                                hasta el
+                                <strong>
+                                    <span t-esc='doc.get_lugar_fecha(doc.fecha_salida)'/>.
+                                </strong>
+                                <br/>
+                                <br/>
+                                <br/>
+                                Guayaquil,
+                                <span t-esc='doc.get_lugar_fecha()'/>.
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </p>
 
                         </div>
                         <div class="clearfix">
@@ -105,7 +100,7 @@
                                         </p>
                                     </div>
                                     <div t-if="doc.firma_autorizada">
-                                        <p>______________________</p>
+                                        <p>__________________________________________</p>
                                         <p>
                                             <strong>
                                                 <span t-field="doc.firma_autorizada"/>
@@ -115,6 +110,9 @@
                                             <strong>C.I.
                                                 <span t-field="doc.firma_autorizada.identification_id"/>
                                             </strong>
+                                        </p>
+                                        <p>
+                                            <strong>RECURSOS HUMANOS</strong>
                                         </p>
                                     </div>
                                 </div>

@@ -46,49 +46,43 @@
                             <br/>
                             <br/>
                         </div>
-                        <div class="clearfix text-justify">
-                            <h4>
-                                <p>
-                                    <td style="line-height: 2">
-                                        Por este medio certifico que el Sr (a).
-                                        <strong>
-                                            <span t-field="doc.employee_id"/>,
-                                        </strong>
-                                        con documento de identidad No.
-                                        <strong>
-                                            <span t-field="doc.employee_id.identification_id"/>;
-                                        </strong>
-                                        labora en la empresa como
-                                        <font style="text-transform: uppercase;">
-                                            <strong>
-                                                <span t-field="doc.job_id"/>
-                                            </strong>
-                                        </font>
-                                        desde el
-                                        <strong>
-                                            <span t-esc='doc.get_lugar_fecha(doc.date_start)'/>
-                                        </strong>
-                                        percibiendo como remuneración bruta mensual el valor de
-                                        <strong>
-                                            <span t-field="doc.wage"/>.
-                                        </strong>
-                                        <br/>
-                                        <br/>
-                                        <br/>
-                                        Guayaquil,
-                                        <span t-esc='doc.get_lugar_fecha()'/>
-                                        <br/>
-                                        <br/>
-                                        <br/>
-                                        <br/>
-                                        <br/>
-                                        <br/>
-                                        <br/>
-                                        <br/>
-                                        <br/>
-                                    </td>
-                                </p>
-                            </h4>
+                        <div class="clearfix text-justify" style="line-height: 2; font-size: 20px">
+                            Por este medio certifico que el Sr (a).
+                            <strong>
+                                <span t-field="doc.employee_id"/>,
+                            </strong>
+                            con documento de identidad No.
+                            <strong>
+                                <span t-field="doc.employee_id.identification_id"/>;
+                            </strong>
+                            labora en la empresa como
+                            <font style="text-transform: uppercase;">
+                                <strong>
+                                    <span t-field="doc.job_id"/>
+                                </strong>
+                            </font>
+                            desde el
+                            <strong>
+                                <span t-esc='doc.get_lugar_fecha(doc.date_start)'/>
+                            </strong>
+                            percibiendo como remuneración bruta mensual el valor de
+                            <strong>
+                                <span t-field="doc.wage"/>.
+                            </strong>
+                            <br/>
+                            <br/>
+                            <br/>
+                            Guayaquil,
+                            <span t-esc='doc.get_lugar_fecha()'/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
                         </div>
                         <div class="clearfix">
                             <div class="row">
@@ -103,7 +97,7 @@
                                         </p>
                                     </div>
                                     <div t-if="doc.firma_autorizada">
-                                        <p>______________________</p>
+                                        <p>__________________________________________</p>
                                         <p>
                                             <strong>
                                                 <span t-field="doc.firma_autorizada"/>
@@ -113,6 +107,9 @@
                                             <strong>C.I.
                                                 <span t-field="doc.firma_autorizada.identification_id"/>
                                             </strong>
+                                        </p>
+                                        <p>
+                                            <strong>RECURSOS HUMANOS</strong>
                                         </p>
                                     </div>
                                 </div>
