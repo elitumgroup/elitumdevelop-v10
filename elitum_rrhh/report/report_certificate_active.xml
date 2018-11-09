@@ -47,76 +47,74 @@
                             <br/>
                         </div>
                         <div class="clearfix text-justify">
-                            <p>
-                                <h4>
-                                    Por este medio certifico que el Sr (a).
-                                    <strong>
-                                        <span t-field="doc.employee_id"/>,
-                                    </strong>
-                                    con documento de identidad No.
-                                    <strong>
-                                        <span t-field="doc.employee_id.identification_id"/>;
-                                    </strong>
-                                    labora en la empresa como
-                                    <font style="text-transform: uppercase;">
+                            <h4>
+                                <p>
+                                    <td style="line-height: 2">
+                                        Por este medio certifico que el Sr (a).
                                         <strong>
-                                            <span t-field="doc.job_id"/>
+                                            <span t-field="doc.employee_id"/>,
                                         </strong>
-                                    </font>
-                                    desde el
-                                    <strong>
-                                        <span t-esc='doc.get_lugar_fecha(doc.date_start)'/>
-                                    </strong>
-                                    percibiendo como remuneración bruta mensual el valor de
-                                    <strong>
-                                        <span t-field="doc.wage"/>.
-                                    </strong>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    Guayaquil,
-                                    <span t-esc='doc.get_lugar_fecha()'/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                </h4>
-                            </p>
+                                        con documento de identidad No.
+                                        <strong>
+                                            <span t-field="doc.employee_id.identification_id"/>;
+                                        </strong>
+                                        labora en la empresa como
+                                        <font style="text-transform: uppercase;">
+                                            <strong>
+                                                <span t-field="doc.job_id"/>
+                                            </strong>
+                                        </font>
+                                        desde el
+                                        <strong>
+                                            <span t-esc='doc.get_lugar_fecha(doc.date_start)'/>
+                                        </strong>
+                                        percibiendo como remuneración bruta mensual el valor de
+                                        <strong>
+                                            <span t-field="doc.wage"/>.
+                                        </strong>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        Guayaquil,
+                                        <span t-esc='doc.get_lugar_fecha()'/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                        <br/>
+                                    </td>
+                                </p>
+                            </h4>
                         </div>
                         <div class="clearfix">
                             <div class="row">
                                 <div class="col-xs-12 text-center">
-                                    <p>______________________</p>
-                                    <p>
-                                        <strong>Gerente General</strong>
-                                    </p>
-                                    <p>
-                                        <strong>RUC 0992898542001</strong>
-                                    </p>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
-                                    <br/>
+                                    <div t-if="not doc.firma_autorizada">
+                                        <p>______________________</p>
+                                        <p>
+                                            <strong>Gerente General</strong>
+                                        </p>
+                                        <p>
+                                            <strong>RUC 0992898542001</strong>
+                                        </p>
+                                    </div>
+                                    <div t-if="doc.firma_autorizada">
+                                        <p>______________________</p>
+                                        <p>
+                                            <strong>
+                                                <span t-field="doc.firma_autorizada"/>
+                                            </strong>
+                                        </p>
+                                        <p>
+                                            <strong>C.I.
+                                                <span t-field="doc.firma_autorizada.identification_id"/>
+                                            </strong>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

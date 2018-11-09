@@ -76,6 +76,12 @@
                     <xpath expr="//field[@name='working_hours']" position="attributes">
                         <attribute name="string">Jornada de Trabajo</attribute>
                     </xpath>
+                    <xpath expr="//field[@name='job_id']" position="after">
+                        <field name="firma_autorizada"
+                               string="Firma Autorizada"/>
+                    </xpath>
+
+
                     <xpath expr="//label[@for='trial_date_start']" position="replace"/>
                     <xpath expr="//group[@name='duration_group']/div" position="replace"/>
                     <xpath expr="//group[@name='duration_group']/div" position="after">

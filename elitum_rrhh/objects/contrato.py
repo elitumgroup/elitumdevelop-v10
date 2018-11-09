@@ -195,3 +195,4 @@ class Contract(models.Model):
         ('pasivo', 'Pasivo'), ],
         string='Status', track_visibility='onchange', default='draft')
     antiguedad = fields.Char('Antiguedad', compute='_get_antiguedad')
+    firma_autorizada = fields.Many2one('hr.employee', string='Empleado')
