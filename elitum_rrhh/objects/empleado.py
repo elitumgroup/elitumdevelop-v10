@@ -332,7 +332,7 @@ class hr_employee(models.Model):
             fecha_fin = datetime.today().date()
             days = abs(fecha_fin - fecha_inicio).days
             meses = round(days * day_, 0)
-            if meses >= 13:
+            if meses > 13:
                 self.tiempo_laboral = True
 
     def action_view_documentos(self):
