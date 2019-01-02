@@ -284,7 +284,7 @@ class HrPayslipRun(models.Model):
             # FR Cobrados
             if rol.rol_id.employee_id.tiempo_laboral or rol.rol_id.employee_id.regla_fondo_reserva:
                 fondos_reserva += round((float(rol.rol_id.employee_id.sueldo) * float(8.33)) / float(100), 3)
-        fondos_reserva += 41.65 # TODO: Por el momento ver qué está mal
+        #fondos_reserva += 41.65 # TODO: Por el momento ver qué está mal
         provision_decimo_tercero = 0.00
         for decimo_tercero_obj in provisiones_decimo_tercero_empleados:
             provision_decimo_tercero += round(decimo_tercero_obj.sueldo / 12.00, 3)
