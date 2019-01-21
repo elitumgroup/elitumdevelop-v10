@@ -262,29 +262,32 @@ class HrPayslipRun(models.Model):
             anticipos_empleados.append(
                 {'empleado': rol.rol_id.employee_id.name, 'monto': round(rol.anticipo_quincena, 3),
                  'cuenta': rol.rol_id.employee_id.account_advance_payment.id})
-            if rol.decimo_tercero == 0.00:
-                provisiones_decimo_tercero_empleados.append(rol)
-            else:
-                decimo_tercero += round(rol.decimo_tercero, 3)
-            if rol.decimo_cuarto == 0.00:
-                provisiones_decimo_cuarto_empleados.append(rol)
-            else:
-                decimo_cuarto += round(rol.decimo_cuarto, 3)
+            if rol.rol_id.employee_id.payroll_structure_id.code != 'RPL_SBS':
+                if rol.decimo_tercero == 0.00:
+                    provisiones_decimo_tercero_empleados.append(rol)
+                else:
+                    decimo_tercero += round(rol.decimo_tercero, 3)
+                if rol.decimo_cuarto == 0.00:
+                    provisiones_decimo_cuarto_empleados.append(rol)
+                else:
+                    decimo_cuarto += round(rol.decimo_cuarto, 3)
+
             multas += round(rol.multas, 3)
             faltas_atrasos += round(rol.faltas_atrasos, 3)
             plan_celular += round(rol.plan_celular, 3)
             otros_egresos += round(rol.otros_egresos, 3)
             neto_recibir += round(rol.neto_recibir, 3)
-            if not rol.rol_id.employee_id.acumula_beneficios:
-                raise except_orm("Error", "Defina en el Empleado si acumula o no Beneficios")
-            # FR Retenidos
-            if rol.rol_id.employee_id.acumula_beneficios == 'si' and rol.rol_id.employee_id.tiempo_laboral:
-                flag_beneficios = True
-                fondos_reserva_retenidos += round((float(rol.rol_id.employee_id.sueldo) * float(8.33)) / float(100), 3)
-            # FR Cobrados
-            if rol.rol_id.employee_id.tiempo_laboral or rol.rol_id.employee_id.regla_fondo_reserva:
-                fondos_reserva += round((float(rol.rol_id.employee_id.sueldo) * float(8.33)) / float(100), 3)
-        #fondos_reserva += 41.65 # TODO: Por el momento ver qué está mal
+
+            if rol.rol_id.employee_id.payroll_structure_id.code != 'RPL_SBS':
+                if not rol.rol_id.employee_id.acumula_beneficios:
+                    raise except_orm("Error", "Defina en el Empleado si acumula o no Beneficios")
+                # FR Retenidos
+                if rol.rol_id.employee_id.acumula_beneficios == 'si' and rol.rol_id.employee_id.tiempo_laboral:
+                    flag_beneficios = True
+                    fondos_reserva_retenidos += round((float(rol.rol_id.employee_id.sueldo) * float(8.33)) / float(100), 3)
+                # FR Cobrados
+                if rol.rol_id.employee_id.tiempo_laboral or rol.rol_id.employee_id.regla_fondo_reserva:
+                    fondos_reserva += round((float(rol.rol_id.employee_id.sueldo) * float(8.33)) / float(100), 3)
         provision_decimo_tercero = 0.00
         for decimo_tercero_obj in provisiones_decimo_tercero_empleados:
             provision_decimo_tercero += round(decimo_tercero_obj.sueldo / 12.00, 3)
