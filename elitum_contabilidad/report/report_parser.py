@@ -397,15 +397,15 @@ class ReporteEstadoFinanciero(models.AbstractModel):
         '''Obtenemos el saldo de la cuenta y verificamos su naturaleza'''
         # MARZ
         movimientos = self.env['account.move.line'].search([('account_id', '=', cuenta.id),
-                                                            ('date', '>=', doc.fecha_inicio),
-                                                            ('date', '<=', doc.fecha_fin)])
+                                                            ('date', '>=', doc['fecha_inicio']),
+                                                            ('date', '<=', doc['fecha_fin'])])
         saldo_inicial_cuenta = 0.00
-        if cuenta.fecha_saldo_inicial >= doc.fecha_inicio and cuenta.fecha_saldo_inicial <= doc.fecha_fin:
+        if cuenta.fecha_saldo_inicial >= doc['fecha_inicio'] and cuenta.fecha_saldo_inicial <= doc['fecha_fin']:
             saldo_inicial_cuenta = cuenta.saldo_inicial  # Saldo Inicial (Nueva Compañía)
         credit = 0.00
         debit = 0.00
         if cuenta.code == '3.3.3':
-            date_object = datetime.strptime(doc.fecha_fin, "%Y-%m-%d")
+            date_object = datetime.strptime(doc['fecha_fin'], "%Y-%m-%d")
             final = date_object.replace(year=date_object.year - 1)
             movimiento = self.env['account.move.line'].search([('account_id', '=', cuenta.id),
                                                                ('date', '=', str(final))])
@@ -428,7 +428,7 @@ class ReporteEstadoFinanciero(models.AbstractModel):
         # Saldo Inicial de la cuenta
         if cuenta.code != '3.3.3':
             monto = monto + self.env['report.elitum_contabilidad.reporte_libro_mayor'].get_saldo_inicial(cuenta,
-                                                                                                         doc.fecha_inicio, doc.fecha_fin)
+                                                                                                         doc['fecha_inicio'], doc['fecha_fin'])
         return monto + saldo_inicial_cuenta
 
     def buscar_padre(self, cuenta):
@@ -614,13 +614,13 @@ class ReporteEstadoResultado(models.AbstractModel):
 
     def get_saldo(self, cuenta, tipo, doc):
         movimientos = self.env['account.move.line'].search([('account_id', '=', cuenta),
-                                                            ('date', '>=', doc.fecha_inicio),
-                                                            ('date', '<=', doc.fecha_fin)])
+                                                            ('date', '>=', doc['fecha_inicio']),
+                                                            ('date', '<=', doc['fecha_fin'])])
         saldo_inicial_cuenta = 0.00
         saldo_inicial = self.env['account.account'].search([
             ('id', '=', cuenta),
-            ('fecha_saldo_inicial', '>=', doc.fecha_inicio),
-            ('fecha_saldo_inicial', '<=', doc.fecha_fin)
+            ('fecha_saldo_inicial', '>=', doc['fecha_inicio']),
+            ('fecha_saldo_inicial', '<=', doc['fecha_fin'])
         ])
         if saldo_inicial:
             saldo_inicial_cuenta = saldo_inicial[0].saldo_inicial  # Saldo Inicial (Nueva Compañía)

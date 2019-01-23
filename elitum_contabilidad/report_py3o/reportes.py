@@ -98,7 +98,7 @@ class ParserSRI(models.TransientModel):
                 total_iva = 0.00
             # 3
             if valor_iva_tributario == 0:
-                total_iva = resta_iva + context['total_ret_iv_compras']- valor_renta_tributario
+                total_iva = resta_iva + context['total_ret_iv_compras'] - valor_renta_tributario
                 context_instance.localcontext.update({'total_iva_mes_actual': total_iva})
                 total_iva = 0.00
                 total_renta_iva = 0.00
@@ -139,6 +139,30 @@ class ParserSRI(models.TransientModel):
                 'get_lines_establecimientos': lines_establecimientos,
                 'get_lines_anulados': lines_anulados
             })
+        # Situacion Financiera
+        if 'reporte_situacion' in self._context:
+            reporte = self.env['account.reportes.financieros'].browse(self._context['active_id'])
+            lines_1 = reporte.get_reporte(context_instance.localcontext, '1')
+            lines_2 = reporte.get_reporte(context_instance.localcontext, '2')
+            lines_3 = reporte.get_reporte(context_instance.localcontext, '3')
+            context_instance.localcontext.update({
+                'get_lines_1': lines_1,
+                'get_lines_2': lines_2,
+                'get_lines_3': lines_3,
+                'suma': lines_2[0]['monto'] + lines_3[0]['monto'],
+                'fecha_actual': fields.date.today(),
+            })
+        if 'reporte_resultado' in self._context:
+            reporte = self.env['account.reporte.estado.resultado'].browse(self._context['active_id'])
+            lines_4 = reporte.get_reporte(context_instance.localcontext, '4')
+            lines_5 = reporte.get_reporte(context_instance.localcontext, '5')
+            context_instance.localcontext.update({
+                'get_lines_4': lines_4,
+                'get_lines_5': lines_5,
+                'suma': lines_4[0]['monto'] - lines_5[0]['monto'],
+                'fecha_actual': fields.date.today(),
+            })
+
         res = super(ParserSRI, self)._extend_parser_context(context_instance, report_xml)
         return res
 

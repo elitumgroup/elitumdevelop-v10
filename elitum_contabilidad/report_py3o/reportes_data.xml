@@ -22,5 +22,27 @@
             <field name="py3o_server_id" ref="report_py3o.local_py3o_server"/>
             <field name="py3o_template_fallback">report_py3o/reporte_ats.ods</field>
         </record>
+        <!--Situacion Financiera-->
+        <report id="reporte_situacion"
+                model="account.reportes.financieros"
+                string="Situación financiera"
+                report_type="py3o"
+                name="elitum_contabilidad.reporte_situacion"/>
+        <record id="elitum_contabilidad.reporte_situacion" model="ir.actions.report.xml">
+            <field name="module">elitum_contabilidad</field>
+            <field name="py3o_server_id" ref="report_py3o.local_py3o_server"/>
+            <field name="py3o_template_fallback">report_py3o/reporte_situacion.ods</field>
+        </record>
+        <!--Estado y resultado-->
+        <report id="reporte_resultado"
+                model="account.reporte.estado.resultado"
+                string="Estado resultado"
+                report_type="py3o"
+                name="elitum_contabilidad.reporte_resultado"/>
+        <record id="elitum_contabilidad.reporte_resultado" model="ir.actions.report.xml">
+            <field name="module">elitum_contabilidad</field>
+            <field name="py3o_server_id" ref="report_py3o.local_py3o_server"/>
+            <field name="py3o_template_fallback">report_py3o/reporte_resultado.ods</field>
+        </record>
     </data>
 </odoo>

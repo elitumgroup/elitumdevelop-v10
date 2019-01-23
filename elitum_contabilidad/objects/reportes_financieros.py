@@ -21,7 +21,7 @@ from datetime import datetime, timedelta
 from odoo import api, fields, models, _
 from itertools import ifilter
 import math
-
+from operator import itemgetter
 
 class LineaReporteFlujoCajaIngresos(models.Model):
     _name = 'linea.reporte.flujo.caja.ingresos'
@@ -194,6 +194,124 @@ class AccountReportesFinancieros(models.TransientModel):
     def imprimir_reporte_estado_situacion_financiero(self):
         return self.env['report'].get_action(self, 'elitum_contabilidad.reporte_estado_financiero')
 
+    def imprimir_reporte_estado_situacion_financiero_xls(self):
+        reporte = []
+        reporte.append(self.id)
+        result = {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'elitum_contabilidad.reporte_situacion',
+            'datas': {'ids': reporte},
+            'context': {
+                'reporte_situacion': True,
+                'fecha_inicio': self.fecha_inicio,
+                'fecha_fin': self.fecha_fin
+            }
+        }
+        return result
+
+    def get_reporte(self, doc, tipo):
+        oject_report = self.env['report.elitum_contabilidad.reporte_estado_financiero']
+        cuentas_contables = self.env['account.account'].search([('user_type_id.name', '!=', 'odoo')], order="code")
+        cuentas = []
+        movimientos = []
+        padre = False
+        total_movimiento = 0.00
+        for cuenta in cuentas_contables:
+            if (cuenta.code.split("."))[0] == tipo:
+                if cuentas == []:
+                    # Cuentas Principales (Sin Movimiento)
+                    if tipo == '1':
+                        name = "ACTIVOS"
+                    if tipo == '2':
+                        name = "PASIVOS"
+                    if tipo == '3':
+                        name = "PATRIMONIO NETO"
+                    cuentas.append({'code': self.env['account.account'].search([('code', '=', tipo)])[0].code,
+                                    'name': name,
+                                    'tipo': 'padre',
+                                    'sub_cuenta': [],
+                                    'monto': 0.00,
+                                    'cuenta': self.env['account.account'].search([('code', '=', tipo)])[0],
+                                    'padre': padre})
+                else:
+                    if cuenta.tipo_contable == 'vista':
+                        # Cuentas Vistas
+                        padre = oject_report.buscar_padre(cuenta)
+                        cuentas = oject_report.update_saldo(cuentas)
+                        cuentas.append({'code': cuenta.code,
+                                        'tipo': 'vista',
+                                        'sub_cuenta': [],
+                                        'name': cuenta.name,
+                                        'monto': 0.00,
+                                        'cuenta': cuenta,
+                                        'padre': padre})
+                    else:
+                        # Cuentas con Movimientos
+                        conciliacion_bancaria = []
+                        if cuenta.user_type_id.type == 'bank':
+                            conciliacion_bancaria = self.env['concilacion.bancaria'].search(
+                                [('fecha_inicio', '=', doc['fecha_inicio']),
+                                 ('fecha_fin', '=', doc['fecha_fin']),
+                                 ('account_id', '=', cuenta.id)])
+                            if len(conciliacion_bancaria) != 0:
+                                monto_movimiento = conciliacion_bancaria[0].saldo_cuenta
+                            else:
+                                monto_movimiento = oject_report.get_saldo(cuenta, tipo, doc)
+                        else:
+                            monto_movimiento = oject_report.get_saldo(cuenta, tipo, doc)
+                        padre = oject_report.buscar_padre(cuenta)
+                        if cuenta.code:  # Imprimimos Cuentas (tipo = movimiento)
+                            print (cuenta.code)
+                        index = map(itemgetter('code'), cuentas).index(padre)
+                        cuentas[index]['sub_cuenta'].append({'code': cuenta.code,
+                                                             'tipo': 'movimiento',
+                                                             'name': cuenta.name,
+                                                             'monto': round(monto_movimiento, 2)})
+                        cuentas[index]['monto'] = cuentas[index]['monto'] + monto_movimiento
+            cuentas = oject_report.update_saldo(cuentas)
+        if tipo == '3':
+            movimientos = []
+            cuenta_estado = filter(lambda x: x['code'] == '3.3', cuentas)[0]
+            if cuenta_estado['monto'] != 0.00:
+                # MARZ
+                monto = oject_report.estado_resultado(doc['fecha_inicio'], doc['fecha_fin'])
+                movimientos_internos = {}
+                if monto >= 0:
+                    movimientos_internos['code'] = '3.3.1.1'
+                    movimientos_internos['tipo'] = 'movimiento'
+                    movimientos_internos['name'] = 'GANANCIA NETA DEL PERIODO'
+                    movimientos_internos['monto'] = monto
+                else:
+                    movimientos_internos['code'] = '3.3.2.1'
+                    movimientos_internos['tipo'] = 'movimiento'
+                    movimientos_internos['name'] = '(-) PERDIDA NETA DEL PERIODO'
+                    movimientos_internos['monto'] = monto
+                for cuenta in cuentas:
+                    if cuenta['code'] == '3.3':
+                        cuenta['sub_cuenta'].append(movimientos_internos)
+                return cuentas
+            # Si Estado de Resultados es igual a 0
+            monto = oject_report.estado_resultado(doc['fecha_inicio'], doc['fecha_fin'])
+            if monto >= 0:
+                movimientos.append({'code': '3.3.1.1',
+                                    'tipo': 'movimiento',
+                                    'name': 'GANANCIA NETA DEL PERIODO',
+                                    'monto': monto})
+            else:
+                movimientos.append({'code': '3.3.2.1',
+                                    'tipo': 'movimiento',
+                                    'name': '(-) PERDIDA NETA DEL PERIODO',
+                                    'monto': monto})
+            cuentas.append({'code': '3.3',
+                            'tipo': 'vista',
+                            'sub_cuenta': movimientos,
+                            'name': 'RESULTADO DEL EJERCICIO',
+                            'monto': monto,
+                            'cuenta': False,
+                            'padre': False})
+            cuentas[0]['monto'] = cuentas[0]['monto'] + monto
+        return cuentas
+
     fecha_inicio = fields.Date('Fecha Inicio', required=True)
     fecha_fin = fields.Date('Fecha Fin', required=True)
 
@@ -219,6 +337,67 @@ class AccountReporteEstadoResultado(models.TransientModel):
 
     def imprimir_reporte_estado_resultado(self):
         return self.env['report'].get_action(self, 'elitum_contabilidad.reporte_estado_resultado')
+
+    def imprimir_reporte_estado_resultado_xls(self):
+        reporte = []
+        reporte.append(self.id)
+        result = {
+            'type': 'ir.actions.report.xml',
+            'report_name': 'elitum_contabilidad.reporte_resultado',
+            'datas': {'ids': reporte},
+            'context': {
+                'reporte_resultado': True,
+                'fecha_inicio': self.fecha_inicio,
+                'fecha_fin': self.fecha_fin
+            }
+        }
+        return result
+
+    def get_reporte(self, doc, tipo):
+        oject_report = self.env['report.elitum_contabilidad.reporte_estado_resultado']
+        cuentas_contables = self.env['account.account'].search([('user_type_id.name', '!=', 'odoo')], order="code")
+        cuentas_contables = cuentas_contables.filtered(lambda x: (x.code.split("."))[0] == tipo)
+        cuentas = []
+        movimientos = []
+        padre = False
+        cuenta_code_comparativo = False
+        total_movimiento = 0.00
+        for cuenta in cuentas_contables:
+            if (cuenta.code.split("."))[0] == tipo:
+                if cuentas == []:
+                    if tipo == '4':
+                        name = "INGRESOS"
+                    if tipo == '5':
+                        name = "COSTOS Y GASTOS"
+                    cuentas.append({'code': self.env['account.account'].search([('code', '=', tipo)])[0].code,
+                                    'name': name,
+                                    'tipo': 'padre',
+                                    'sub_cuenta': [],
+                                    'monto': 0.00,
+                                    'cuenta': self.env['account.account'].search([('code', '=', tipo)])[0],
+                                    'padre': padre})
+                else:
+                    if cuenta.tipo_contable == 'vista':
+                        padre = oject_report.buscar_padre(cuenta)
+                        cuentas = oject_report.update_saldo(cuentas)
+                        cuentas.append({'code': cuenta.code,
+                                        'tipo': 'vista',
+                                        'sub_cuenta': [],
+                                        'name': cuenta.name,
+                                        'monto': 0.00,
+                                        'cuenta': cuenta,
+                                        'padre': padre})
+                    else:
+                        padre = oject_report.buscar_padre(cuenta)
+                        print (cuenta.code)
+                        index = map(itemgetter('code'), cuentas).index(padre)
+                        cuentas[index]['sub_cuenta'].append({'code': cuenta.code,
+                                                             'tipo': 'movimiento',
+                                                             'name': cuenta.name,
+                                                             'monto': oject_report.get_saldo(cuenta.id, tipo, doc)})
+                        cuentas[index]['monto'] = cuentas[index]['monto'] + oject_report.get_saldo(cuenta.id, tipo, doc)
+        cuentas = oject_report.update_saldo(cuentas)
+        return cuentas
 
     fecha_inicio = fields.Date('Fecha Inicio', required=True)
     fecha_fin = fields.Date('Fecha Fin', required=True)
