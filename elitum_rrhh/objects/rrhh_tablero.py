@@ -227,9 +227,12 @@ class RrhhTablero(models.Model):
                           ('date_end', '<=', fecha_fin.strftime('%Y-%m-%d')),
                           ('state', '=', 'closed')]
                 roles = self.env['hr.payslip.run'].search(domain)
+                ne = 0
+                for role in roles:
+                    ne += int(role.numero_empleados)
                 data.append({
                     'label': self.get_mes(mes),
-                    'value': int(roles.numero_empleados)
+                    'value': ne
                 })
             data = data[::-1]
         elif self.tipo_tablero == 'ausencias':
