@@ -147,9 +147,12 @@ class RrhhTablero(models.Model):
                       ('date_end', '<=', fecha_fin.strftime('%Y-%m-%d')),
                       ('state', '=', 'closed')]
             roles = self.env['hr.payslip.run'].search(domain)
+            ne = 0
+            for role in roles:
+                ne += int(role.numero_empleados)
             data.append({
                 'mes': self.get_mes(mes),
-                'empleados': int(roles.numero_empleados)
+                'empleados': ne
             })
         data = data[::-1]
         return data
