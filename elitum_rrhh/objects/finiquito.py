@@ -99,7 +99,7 @@ class Settlement(models.Model):
                 })
         # Cálculo
         total_13 = float(float(sum((line['sueldo'] * line['dias'] / float(30))/ float(12) for line in data_13)))
-        total_14 = float(float(sum((float(386) / float(360)) * line['dias'] for line in data_14)))
+        total_14 = float(float(sum((float(394) / float(360)) * line['dias'] for line in data_14)))
         total_vacation = float(float(self.last_salary) / float(30) * float(self.pending_holidays)) # MARZ
         self.total_thirteenth = total_13
         self.total_fourteenth = total_14

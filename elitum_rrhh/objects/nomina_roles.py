@@ -293,8 +293,8 @@ class HrPayslipRun(models.Model):
             provision_decimo_tercero += round(decimo_tercero_obj.sueldo / 12.00, 3)
         provision_decimo_cuarto = 0.00
         for decimo_cuarto_obj in provisiones_decimo_cuarto_empleados:
-            # Cambio sueldo básico de 375 a 386 (2018)
-            provision_decimo_cuarto += round((float(386) / 360) * decimo_cuarto_obj.dias_trabajados, 3)
+            # Cambio sueldo básico de 386 a 394 (2019)
+            provision_decimo_cuarto += round((float(394) / 360) * decimo_cuarto_obj.dias_trabajados, 3)
         # Si acumula beneficios (FR)
         if flag_beneficios == True:
             regla = self.env['hr.salary.rule'].search([('name', '=', 'Fondos de Reserva Retenidos')])[0]
