@@ -93,7 +93,7 @@
                                             <strong>Gerente General</strong>
                                         </p>
                                         <p>
-                                            <strong>RUC 0992898542001</strong>
+                                            <strong>RUC 0992968168001</strong>
                                         </p>
                                     </div>
                                     <div t-if="doc.firma_autorizada">
