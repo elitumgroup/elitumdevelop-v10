@@ -407,6 +407,10 @@
                     </xsd:documentation>
                 </xsd:annotation>
             </xsd:element>
+            <xsd:element name="air" type="airRecapType" minOccurs="0"
+				maxOccurs="1">
+			</xsd:element>
+            
             <xsd:element name="estabRetencion1" type="establecimientoType" minOccurs="0"/>
             <xsd:element name="ptoEmiRetencion1" type="ptoEmisionType" minOccurs="0"/>
             <xsd:element name="secRetencion1" type="secuencialType" minOccurs="0"/>
